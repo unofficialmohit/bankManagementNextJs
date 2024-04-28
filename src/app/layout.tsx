@@ -10,7 +10,9 @@ import { connectToContract, contract } from "@/utils/connectToContract";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {store} from '../store/store'
-import { updateAccountAddress,updateBalance } from "@/slice/accountSlice.ts";
+import { updateAccountAddress,updateBalance, updateStatus } from "@/slice/accountSlice.ts";
+import { getBalance } from "@/utils/getBalance";
+import { getStatus } from "@/utils/getStatus";
 const inter = Inter({ subsets: ["latin"] });
 declare global {
   interface Window{
@@ -23,71 +25,70 @@ declare global {
 // };
 
 function Component(){
+  const[isAccountChanged,setIsAccountChanged]=useState(true);
+
   const account=useSelector((state:any)=>state.account);
   const balance=useSelector((state:any)=>state.balance);
+  const accountExist=useSelector((state:any)=>state.status);
   const dispatch=useDispatch();
-    async function getBalance(){
-      try{
-        let result = await contract.methods.getBalance().call({ from: account });
-        if(result==='0')
-          dispatch(updateBalance('-9987654321'))
+    // async function getBalance(){
+    //   try{
+    //     let result = await contract.methods.getBalance().call({ from: account });
+    //     if(result==='0')
+    //       dispatch(updateBalance('-9987654321'))
   
   
-        dispatch(updateBalance(result))
+    //     dispatch(updateBalance(result))
   
-        // setBalance('-9987654321');
-        // setBalance(result);
-      }
-      catch(error:any)
-      {
-        dispatch(updateBalance(''))
-        // setBalance("");
-        console.log(error);
-      }
-    };
+    //     // setBalance('-9987654321');
+    //     // setBalance(result);
+    //   }
+    //   catch(error:any)
+    //   {
+    //     dispatch(updateBalance(''))
+    //     // setBalance("");
+    //     console.log(error);
+    //   }
+    // };
   if(account){
     if(window.ethereum)
-     window.ethereum.on("accountsChanged", (accounts:any) => {
+     window.ethereum.on("accountsChanged", async (accounts:any) => {
       // setAccount(accounts[0])
       dispatch(updateAccountAddress(accounts[0]));
+
     });}
   
-  function requestAccount(){
   
-      if (window.ethereum) {
-        // res[0] for fetching a first wallet
-        window.ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then((res: any) =>{
-              dispatch(updateAccountAddress(res[0]))
-              // setAccount(res[0]);
-              console.log(res[0]);
-           
-             
-          }
-        )
-        .catch
-        {
-          // setAccount("")
-          dispatch(updateAccountAddress(""))
-  
-        }
-    } else {
-        alert("install metamask extension!!");
-        return;
-    }
-  }
   React.useEffect(()=>{
     if(!contract)
     {
       connectToContract();
     }
-    if(account){
-    getBalance();
-  }
+
+    // # update balance 
+    // async function setAccountStatus(){
+    //   dispatch(updateStatus(await getStatus(account)))
+    //   setIsAccountChanged(!isAccountChanged);
+    //   }
+    //   if(account){
+    //   setAccountStatus();
+      
+    // }
+
   },[account])
+
+
+  // React.useEffect(()=>{
+  //   async function updateBalanceKey(){
+  //     console.log(account);
+  //     dispatch(updateBalance(await getBalance(account)));
+  //   }
+  //   if(account && accountExist){
+  //     updateBalanceKey();
+  //   }
+  // },[isAccountChanged])
   return(
-    <Navbar className="top-2" getAccount={requestAccount}/>
+    <Navbar className="top-2"/>
   )
 }
 

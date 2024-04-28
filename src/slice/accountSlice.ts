@@ -1,7 +1,8 @@
 import { createSlice} from "@reduxjs/toolkit";
 const initialState:any={
     account:0x000000000000000000000000000000000000,
-    balance:0
+    balance:0,
+    status:false    //account is created or not
 }
 export const accountSlice:any=createSlice({
     name:"account",
@@ -12,9 +13,13 @@ export const accountSlice:any=createSlice({
         },
         updateBalance:(state:any,action:any)=>{
             return {...state,balance:action.payload}
+        },
+        updateStatus:(state:any,action:any)=>{
+            return{...state,status:action.payload}
         }
+
     }
 
 })
-export const {updateAccountAddress,updateBalance}=accountSlice.actions;
+export const {updateAccountAddress,updateBalance,updateStatus}=accountSlice.actions;
 export default accountSlice.reducer;
