@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
 import { contract, webjs } from "@/utils/connectToContract";
+import { useSelector } from "react-redux";
 
 const transition = {
   type: "spring",
@@ -90,8 +91,10 @@ export const HoveredLink = ({ children, ...rest }: any) => {
     </Link>
   );
 };
-export default function Navbar({ className ,getAccount,account,balance}: { className?: string,getAccount:any,account:string ,balance:string}) {
+export default function Navbar({ className ,getAccount}: { className?: string,getAccount:any}) {
     const [active, setActive] = useState<string | null>(null);
+    const account=useSelector((state:any)=>state.account)
+    const balance=useSelector((state:any)=>state.balance)
     const createAccount=async ()=>{
       let flag=1;
 	try{
@@ -120,9 +123,9 @@ catch(error)
         className={cn("fixed top-10 inset-x-0 max-w-8xl mx-auto z-50", className)}
       >
         <Menu setActive={setActive}>
-       <HoveredLink href="/"><h1 style={{fontSize:"30px",marginRight:"100px"}}>DECENTERALIZED BANK</h1></HoveredLink>
-       <div className="flex space-x-6 mt-2 justify-evenly w-96">
-            <HoveredLink href="/">Home</HoveredLink>
+       <HoveredLink href="/"><h1 style={{fontSize:"30px",marginRight:"10px"}}>DECENTERALIZED BANK</h1></HoveredLink>
+       <div className="flex space-x-4 mt-2 justify-evenly w-96">
+            <div style={{color:"black"}}><HoveredLink href="/"  >Home</HoveredLink></div>
             <MenuItem setActive={setActive} active={active} item="Transaction">
                 {/* <div className="flex flex-col space-y-4 text-sm"> */}
                 <div className="  text-sm grid grid-cols-2 gap-5 p-1">

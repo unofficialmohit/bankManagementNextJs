@@ -7,6 +7,7 @@ import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import React, { useState } from 'react'
 import { Vortex } from '@/Layouts/Vortex';
 const Transaction = () => {
+	
   const[depositAmount,setDepositAmount]=useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
