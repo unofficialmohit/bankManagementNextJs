@@ -5,6 +5,15 @@ import { cn } from '@/utils/cn';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import React from 'react'
+import { 
+  Select,  
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue, 
+} from '@/components/Select';
 import { RemoveScroll } from 'react-remove-scroll';
 const Loan = () => {
  return(
@@ -51,6 +60,23 @@ const Loan = () => {
             placeholder="••••••••"
             type="twitterpassword"
           />
+        </LabelInputContainer> */}
+        {/* <LabelInputContainer className="mb-4">
+        <Label htmlFor="loan">Loan Type</Label>
+
+          <Select>
+        <SelectTrigger className="w-screen">
+          <SelectValue placeholder="Select a loan type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Loan Type</SelectLabel>
+            <SelectItem value="apple">Car Loan</SelectItem>
+            <SelectItem value="banana">Home Loan</SelectItem>
+            <SelectItem value="blueberry">Buisness Loan</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
         </LabelInputContainer> */}
  
         <button

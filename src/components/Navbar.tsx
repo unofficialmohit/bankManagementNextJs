@@ -175,7 +175,7 @@ setAccountStatus();
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="Manage loan fund">
                 <div className="  text-sm grid grid-cols-2 gap-5 p-1">
-                <HoveredLink href="/addloanfund">Deposit loan fund</HoveredLink>
+                <HoveredLink href="/depositloanfund">Deposit loan fund</HoveredLink>
                   <HoveredLink href="/withdrawloanfund">Withdraw loan fund</HoveredLink>
                 </div>
               </MenuItem>

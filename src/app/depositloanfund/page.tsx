@@ -7,9 +7,7 @@ import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import React from 'react'
 
 const AddFund = () => {
-return(
-  <div className='w-screen h-screen'>
-    
+  return (
     <BackgroundGradientAnimation>
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
    
@@ -39,7 +37,7 @@ return(
                 <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
               </LabelInputContainer> */}
               <LabelInputContainer className="mb-4">
-                <Label htmlFor="loan">Withdraw Fund</Label>
+                <Label htmlFor="loan">Deposit Fund</Label>
                 <Input id="loan" placeholder="Enter Amount" 
                 // value={depositAmount} 
                 // onChange={(e)=>setDepositAmount(e.target.value)} 
@@ -59,7 +57,7 @@ return(
                 type="submit"
               >
                 
-                Withdraw Loan Fund &rarr;
+                Deposit Loan Fund &rarr;
                 <BottomGradient />
               </button>
        
@@ -92,31 +90,29 @@ return(
           </div>
     </div>
         </BackgroundGradientAnimation>
-  </div>
-  );
-  }
-  
-  const BottomGradient = () => {
-  return (
-    <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-    </>
-  );
-  };
-  
-  const LabelInputContainer = ({
-  children,
-  className,
-  }: {
-  children: React.ReactNode;
-  className?: string;
-  }) => {
-  return (
-    <div className={cn("flex flex-col space-y-2 w-full", className)}>
-      {children}
-    </div>
-  );
-  };
-  
+    );
+    }
+    
+    const BottomGradient = () => {
+    return (
+      <>
+        <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+        <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+      </>
+    );
+    };
+    
+    const LabelInputContainer = ({
+    children,
+    className,
+    }: {
+    children: React.ReactNode;
+    className?: string;
+    }) => {
+    return (
+      <div className={cn("flex flex-col space-y-2 w-full", className)}>
+        {children}
+      </div>
+    );
+    };
 export default AddFund
