@@ -3,11 +3,13 @@ import { Boxes } from '@/Layouts/Boxes';
 import { Input } from '@/components/Input';
 import { cn } from '@/utils/cn';
 import { Label } from '@radix-ui/react-label';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '../../components/Select';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React from 'react'
+import React, { useState } from 'react'
 import { RemoveScroll } from 'react-remove-scroll';
 
 const Loan = () => {
+  const[loanType,setLoanType]=useState("");
   return(
 
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
@@ -38,13 +40,13 @@ const Loan = () => {
              <Label htmlFor="email">Email Address</Label>
              <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
            </LabelInputContainer> */}
-           <LabelInputContainer className="mb-4">
+           {/* <LabelInputContainer className="mb-4">
              <Label htmlFor="loan">Pay Loan</Label>
              <Input id="loan" placeholder="Enter Amount" 
              // value={depositAmount} 
              // onChange={(e)=>setDepositAmount(e.target.value)} 
              type="text" />
-           </LabelInputContainer>
+           </LabelInputContainer> */}
            {/* <LabelInputContainer className="mb-8">
              <Label htmlFor="twitterpassword">Your twitter password</Label>
              <Input
@@ -53,9 +55,32 @@ const Loan = () => {
                type="twitterpassword"
              />
            </LabelInputContainer> */}
+             <LabelInputContainer className="mb-4">
+        <Label htmlFor="loan">Loan Type</Label>
+
+          <Select
+          value={loanType}
+          onValueChange={(e)=>{
+            setLoanType(e);
+            // console.log("ddd",e);
+          }}
+          >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select a loan type" />
+        </SelectTrigger>
+        <SelectContent className='bg-white'>
+          <SelectGroup>
+            <SelectLabel>Loan Type</SelectLabel>
+            <SelectItem value="car"  className='cursor-pointer'>Car Loan</SelectItem>
+            <SelectItem value="home"  className='cursor-pointer'>Home Loan</SelectItem>
+            <SelectItem value="education"  className='cursor-pointer'>Buisness Loan</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+        </LabelInputContainer>
     
            <button
-             className="bg-gradient-to-br relative group/btn from-cyan-600 dark:from-cyan-600 dark:to-cyan-600 to-neutral-600 block dark:bg-cyan-600 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+             className="mt-16 bg-gradient-to-br relative group/btn from-cyan-600 dark:from-cyan-600 dark:to-cyan-600 to-neutral-600 block dark:bg-cyan-600 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
              type="submit"
            >
              
@@ -63,7 +88,7 @@ const Loan = () => {
              <BottomGradient />
            </button>
     
-           <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+           {/* <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
     
            <div className="flex flex-col space-y-4">
              <button
@@ -87,7 +112,7 @@ const Loan = () => {
                <BottomGradient />
              </button>
             
-           </div>
+           </div> */}
          </form>
        </div>
    </div>

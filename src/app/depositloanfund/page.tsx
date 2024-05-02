@@ -1,12 +1,47 @@
 "use client"
 import { BackgroundGradientAnimation } from '@/Layouts/Gradient';
 import { Input } from '@/components/Input';
+import { updateBalance } from '@/slice/accountSlice';
 import { cn } from '@/utils/cn';
+import { contract, webjs } from '@/utils/connectToContract';
+import { getBalance } from '@/utils/getBalance';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 
 const AddFund = () => {
+  const[loanAmount,setLoanAmount]=useState("");
+  const account=useSelector((state:any)=>state.account);
+  const dispatch=useDispatch();
+  
+const handleSubmit=async (e:any)=>{
+    e.preventDefault();
+    let flag=1;
+	await contract.methods.addLoanFund().estimateGas({from:account , value: parseInt(loanAmount)})
+	.then(async (result:any)=>{
+		const gasPrice = await webjs.eth.getGasPrice();
+		console.log(gasPrice+"  "+result);
+		console.log(result*gasPrice);
+		window.alert(`The Total gas will be ${result}
+		Current gas price is ${gasPrice}
+		Total Gas Cost will be ${gasPrice*result};`)
+	})
+	.catch((error:any)=>{
+		flag=0;
+		window.alert("TRANSACTION NOT COMPLETED. "+error);
+		console.log(error);
+	})
+	if(flag==1)
+	await contract.methods
+    .addLoanFund()
+    .send({ from: account, value: parseInt(loanAmount) })
+    .catch((error:any) => {
+      window.alert("ERROR" + error);
+    });
+  dispatch(updateBalance(await getBalance(account)));
+
+  }
   return (
     <BackgroundGradientAnimation>
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
@@ -21,7 +56,7 @@ const AddFund = () => {
               Secured Decenterlized Bank
             </p>
           
-            <form className="my-8">
+            <form className="my-8" onSubmit={handleSubmit}>
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
                 {/* <LabelInputContainer>
                   <Label htmlFor="firstname">First name</Label>
@@ -39,8 +74,8 @@ const AddFund = () => {
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="loan">Deposit Fund</Label>
                 <Input id="loan" placeholder="Enter Amount" 
-                // value={depositAmount} 
-                // onChange={(e)=>setDepositAmount(e.target.value)} 
+                value={loanAmount} 
+                onChange={(e)=>setLoanAmount(e.target.value)} 
                 type="text" />
               </LabelInputContainer>
               {/* <LabelInputContainer className="mb-8">
