@@ -4,15 +4,18 @@ import { cn } from '@/utils/cn';
 import { contract, webjs } from '@/utils/connectToContract';
 import { Label } from "../../components/Label";
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Vortex } from '@/Layouts/Vortex';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
+import { useRouter } from 'next/navigation';
 const Transaction = () => {
 	const dispatch=useDispatch();
+	const navigate=useRouter();
   const[depositAmount,setDepositAmount]=useState("");
   const account=useSelector((state:any)=>state.account);
+  const userStatus=useSelector((state:any)=>state.status);
 	async function depositETH(){
 		let flag=1;
 		await contract.methods.deposit(parseInt(depositAmount)).estimateGas({from:account, value: parseInt(depositAmount) })
@@ -49,6 +52,14 @@ const Transaction = () => {
 	depositETH();
     console.log("Form submitted");
   };
+  useEffect(()=>{
+	if(!userStatus)
+		{
+			alert("Please login to use this feature");
+			navigate.replace('/');
+		}
+
+  },[]);
   return (
 	<div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
     <Vortex backgroundColor="black"

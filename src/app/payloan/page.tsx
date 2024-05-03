@@ -5,11 +5,90 @@ import { cn } from '@/utils/cn';
 import { Label } from '@radix-ui/react-label';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '../../components/Select';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RemoveScroll } from 'react-remove-scroll';
+import { contract, webjs } from '@/utils/connectToContract';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateBalance } from '@/slice/accountSlice';
+import { getBalance } from '@/utils/getBalance';
+import { useRouter } from 'next/navigation';
 
-const Loan = () => {
+const Loan =() => {
+  const account=useSelector((state:any)=>state.account);
+  const dispatch=useDispatch();
+
   const[loanType,setLoanType]=useState("");
+  const payLoan=async (e:any)=>{
+    e.preventDefault();
+    if (loanType == "car") {
+      let flag=1;
+      await contract.methods.payCarEmi().estimateGas({from:account})
+      .then(async (result:any)=>{
+        const gasPrice = await webjs.eth.getGasPrice();
+        console.log(gasPrice+"  "+result);
+        console.log(result*gasPrice);
+        window.alert(`The Total gas will be ${result}`)
+    
+      })
+      .catch((error:any)=>{
+        flag=0;
+        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+      })
+      if(flag==1)
+        await contract.methods.payCarEmi().send({ from: account });
+      } 
+      
+      
+      else if (loanType == "home") {
+      let flag=1;
+      await contract.methods.payHomeEmi().estimateGas({from:account})
+      .then(async (result:any)=>{
+        const gasPrice = await webjs.eth.getGasPrice();
+        console.log(gasPrice+"  "+result);
+        console.log(result*gasPrice);
+        window.alert(`The Total gas will be ${result}`)
+    
+      })
+      .catch((error:any)=>{
+        flag=0;
+        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+      })
+      if(flag==1)
+        await contract.methods.payHomeEmi().send({ from: account });
+      } 
+      
+      
+      else {
+      let flag=1;
+      await contract.methods.payEducationEmi().estimateGas({from:account})
+      .then(async (result:any)=>{
+        const gasPrice = await webjs.eth.getGasPrice();
+        console.log(gasPrice+"  "+result);
+        console.log(result*gasPrice);
+        window.alert(`The Total gas will be ${result}`)
+    
+      })
+      .catch((error:any)=>{
+        flag=0;
+        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+      })
+      if(flag==1)
+        await contract.methods.payEducationEmi().send({ from: account });
+  
+      
+    }
+    dispatch(updateBalance(await getBalance(account)));
+  }
+  const navigate=useRouter();
+  const userStatus=useSelector((state:any)=>state.status);
+  useEffect(()=>{
+	if(!userStatus)
+		{
+			alert("Please login to use this feature");
+			navigate.replace('/');
+		}
+
+  },[]);
   return(
 
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
@@ -25,7 +104,7 @@ const Loan = () => {
            Securely pay emi to decenterlized Bank
          </p>
        
-         <form className="my-8">
+         <form className="my-8" onSubmit={payLoan}>
            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
              {/* <LabelInputContainer>
                <Label htmlFor="firstname">First name</Label>
@@ -73,7 +152,7 @@ const Loan = () => {
             <SelectLabel>Loan Type</SelectLabel>
             <SelectItem value="car"  className='cursor-pointer'>Car Loan</SelectItem>
             <SelectItem value="home"  className='cursor-pointer'>Home Loan</SelectItem>
-            <SelectItem value="education"  className='cursor-pointer'>Buisness Loan</SelectItem>
+            <SelectItem value="education"  className='cursor-pointer'>Education Loan</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

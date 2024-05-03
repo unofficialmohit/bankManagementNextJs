@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
 import { contract, webjs } from "@/utils/connectToContract";
 import { useDispatch, useSelector } from "react-redux";
 import getAccount from "@/utils/getAccount";
-import { updateAccountAddress, updateBalance, updateStatus } from "@/slice/accountSlice";
+import { updateAccountAddress, updateBalance, updateContractOwner, updateStatus } from "@/slice/accountSlice";
 import { getBalance } from "@/utils/getBalance";
 import { getStatus } from "@/utils/getStatus";
 
@@ -98,6 +98,8 @@ export const HoveredLink = ({ children, ...rest }: any) => {
 export default function Navbar({ className}: { className?: string}) {
     const [active, setActive] = useState<string | null>(null);
     const dispatch=useDispatch();
+    const contractOwner=useSelector((state:any)=>state.owner);
+    console.log(contractOwner);
     const[isAccountChanged,setIsAccountChanged]=useState(true);
     const account=useSelector((state:any)=>state.account)
     const balance=useSelector((state:any)=>state.balance)
@@ -142,6 +144,7 @@ React.useEffect(()=>{
 React.useEffect(()=>{
 async function setAccountStatus(){
 dispatch(updateStatus(await getStatus(account)))
+dispatch(updateContractOwner(await contract.methods.getOwner().call({ from: account })));
 setIsAccountChanged(!isAccountChanged);
 
 }

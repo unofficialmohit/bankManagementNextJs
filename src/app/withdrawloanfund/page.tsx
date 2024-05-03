@@ -7,11 +7,13 @@ import { contract, webjs } from '@/utils/connectToContract';
 import { getBalance } from '@/utils/getBalance';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const AddFund = () => {
 const account=useSelector((state:any)=>state.account);
+const contractOwner=useSelector((state:any)=>state.owner);
 const [withdrawFundAmount,setWithdrawFundAmount]=useState("");
 const dispatch=useDispatch();
   const handleSubmit=async (e:any)=>{
@@ -36,6 +38,17 @@ const dispatch=useDispatch();
   dispatch(updateBalance(await getBalance(account)));
   setWithdrawFundAmount("");
   }
+  const navigate=useRouter();
+  useEffect(()=>{
+    if(contractOwner&&account)
+    if(contractOwner?.toUpperCase()!==account?.toUpperCase())
+      {
+        console.log("tttttttttt",contractOwner?.toUpperCase(),account?.toUpperCase());
+        alert("Only admin can add fund");
+        navigate.replace('/');
+      }
+  }
+  ,[])
 return(
   <div className='w-screen h-screen'>
     

@@ -4,7 +4,7 @@ import { Input } from '@/components/Input';
 import { cn } from '@/utils/cn';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
   Select,  
   SelectContent,
@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { contract, webjs } from '@/utils/connectToContract';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
+import { useRouter } from 'next/navigation';
 const Loan = () => {
   const[loanAmount,setLoanAmount]=useState("");
   const[loanType,setLoanType]=useState("");
@@ -96,6 +97,16 @@ const Loan = () => {
       dispatch(updateBalance(await getBalance(account)));
     
   }
+  const navigate=useRouter();
+  const userStatus=useSelector((state:any)=>state.status);
+  useEffect(()=>{
+	if(!userStatus)
+		{
+			alert("Please login to use this feature");
+			navigate.replace('/');
+		}
+
+  },[]);
  return(
 
  <div className=" mt-1 w-[calc(100%-4rem)] mx-auto rounded-md  h-[50rem] overflow-hidden">
@@ -166,7 +177,7 @@ const Loan = () => {
             <SelectLabel>Loan Type</SelectLabel>
             <SelectItem value="car"  className='cursor-pointer'>Car Loan</SelectItem>
             <SelectItem value="home"  className='cursor-pointer'>Home Loan</SelectItem>
-            <SelectItem value="education"  className='cursor-pointer'>Buisness Loan</SelectItem>
+            <SelectItem value="education"  className='cursor-pointer'>Education Loan</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

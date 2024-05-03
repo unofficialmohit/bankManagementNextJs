@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from "../../components/Label";
 import { Input } from "../../components/Input";
 import { cn } from "@/utils/cn";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { contract, webjs } from '@/utils/connectToContract';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
+import { useRouter } from 'next/navigation';
  
 const Transaction = () => {
   const dispatch=useDispatch();
@@ -54,6 +55,16 @@ const Transaction = () => {
 
     console.log("Form submitted");
   };
+  const navigate=useRouter();
+  const userStatus=useSelector((state:any)=>state.status);
+  useEffect(()=>{
+	if(!userStatus)
+		{
+			alert("Please login to use this feature");
+			navigate.replace('/');
+		}
+
+  },[]);
   return (
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
     <Vortex backgroundColor="black"
