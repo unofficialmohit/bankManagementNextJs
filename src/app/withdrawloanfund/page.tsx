@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const AddFund = () => {
 const account=useSelector((state:any)=>state.account);
+const [currentLoanFund,setCurrentLoanFund]=useState("0");
 const contractOwner=useSelector((state:any)=>state.owner);
 const [withdrawFundAmount,setWithdrawFundAmount]=useState("");
 const dispatch=useDispatch();
@@ -36,24 +37,48 @@ const dispatch=useDispatch();
     .withdrawLoanFund(parseInt(withdrawFundAmount))
     .send({ from: account });
   dispatch(updateBalance(await getBalance(account)));
+  displayLoan();
   setWithdrawFundAmount("");
   }
   const navigate=useRouter();
+
+  const displayLoan:any=async ()=>{
+    await contract.methods.getLoanFund().estimateGas({from:account})
+  .then(async (result:any)=>{
+    const gasPrice = await webjs.eth.getGasPrice();
+    console.log(gasPrice+"  "+result);
+    console.log(result*gasPrice);
+  })
+  const result = await contract.methods.getLoanFund().call({ from: account });
+  console.log("ssssssss",result);
+  setCurrentLoanFund(result.toString());
+  }
   useEffect(()=>{
     if(contractOwner&&account)
-    if(contractOwner?.toUpperCase()!==account?.toUpperCase())
+    {
+      if(contractOwner?.toUpperCase()!==account?.toUpperCase())
       {
         console.log("tttttttttt",contractOwner?.toUpperCase(),account?.toUpperCase());
         alert("Only admin can add fund");
         navigate.replace('/');
       }
+      
+      displayLoan();
+
+}
+else
+{
+  alert("Please Connect your wallet")
+  navigate.replace('/');
+}
+    
   }
-  ,[])
+  ,[account])
 return(
   <div className='w-screen h-screen'>
     
     <BackgroundGradientAnimation>
-    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
+    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[45rem] overflow-hidden">
    
        
           
@@ -80,6 +105,7 @@ return(
                 <Label htmlFor="email">Email Address</Label>
                 <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
               </LabelInputContainer> */}
+               <div className='mb-7'>Current Fund Amount : {currentLoanFund}</div>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="loan">Withdraw Fund</Label>
                 <Input id="loan" placeholder="Enter Amount" 

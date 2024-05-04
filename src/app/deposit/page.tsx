@@ -55,7 +55,7 @@ const Transaction = () => {
   useEffect(()=>{
 	if(!userStatus)
 		{
-			alert("Please login to use this feature");
+			alert("Please Connect your wallet");
 			navigate.replace('/');
 		}
 

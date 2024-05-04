@@ -15,44 +15,34 @@ import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
  
-const Transaction = () => {
+const Transfer:any = () => {
   const dispatch=useDispatch();
-  const[withdrawAmount,setWithdrawAmount]=useState("");
+  const[tranferAmount,setTransferAmount]=useState("");
+  const[recieverAddress,setRecieverAddress]=useState("");
   const account=useSelector((state:any)=>state.account);
-  async function withdrawETH(){
-      let flag=1;
-      await contract.methods.withdraw(parseInt(withdrawAmount)).estimateGas({from:account})
-      .then(async (result:any)=>{
-        const gasPrice = await webjs.eth.getGasPrice();
-        console.log(gasPrice+"  "+result);
-        console.log(result*gasPrice);
-        window.alert(`The Total gas will be ${result}`)
-      })
-      .catch((error:any)=>{
-        flag=0;
-        window.alert("YOU CANT PERFORM THIS TRANSACTION");
-      })
-      if(flag==1){
-      await contract.methods.withdraw(parseInt(withdrawAmount)).send({ from: account });
-      dispatch(updateBalance(await getBalance(account)));
-      setWithdrawAmount("");
-    }
-      
-  }
+ const transfeETH=async()=>{
+    let flag=1;
+	await contract.methods.transferMoney(parseInt(tranferAmount), recieverAddress).estimateGas({from:account})
+	.then(async (result:any)=>{
+		const gasPrice = await webjs.eth.getGasPrice();
+		console.log(gasPrice+"  "+result);
+		console.log(result*gasPrice);
+		window.alert(`The Total gas will be ${result}`)
+
+	})
+	.catch((error:any)=>{
+		flag=0;
+		window.alert("YOU CANT PERFORM THIS TRANSACTION");
+	})
+	if(flag==1)
+	await contract.methods
+    .transferMoney(parseInt(tranferAmount), recieverAddress)
+    .send({ from: account });
+    dispatch(updateBalance(await getBalance(account)));
+ }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(withdrawAmount=="")
-      {
-      alert("Enter withdraw Amount");
-      return;
-      }
-      if(isNaN(parseInt(withdrawAmount)))
-      {
-      alert("Please enter a number");
-      return;
-      }
-      withdrawETH();
-
+   transfeETH();
     console.log("Form submitted");
   };
   const navigate=useRouter();
@@ -66,7 +56,7 @@ const Transaction = () => {
 
   },[]);
   return (
-    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
+    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[45rem] overflow-hidden">
     <Vortex backgroundColor="black"
 	className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
   >
@@ -75,7 +65,7 @@ const Transaction = () => {
         DECENTERLIZED BANK
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Withdraw your ETH from decetenrlized Bank
+        Transfer your ETH to Another Account Securely 
       </p>
  
       <form className="my-8" onSubmit={handleSubmit}>
@@ -94,8 +84,12 @@ const Transaction = () => {
           <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
         </LabelInputContainer> */}
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="withdraw">Withdraw ETH</Label>
-          <Input id="withdraw" placeholder="Enter Amount" value={withdrawAmount} onChange={(e)=>setWithdrawAmount(e.target.value)} type="text" />
+          <Label htmlFor="withdraw">Transfer ETH</Label>
+          <Input id="withdraw" placeholder="Enter Amount" value={tranferAmount} onChange={(e)=>setTransferAmount(e.target.value)} type="text" />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="reciever">Reciever's Address</Label>
+          <Input id="reciever" placeholder="Enter Addresss" value={recieverAddress} onChange={(e)=>setRecieverAddress(e.target.value)} type="text" />
         </LabelInputContainer>
         {/* <LabelInputContainer className="mb-8">
           <Label htmlFor="twitterpassword">Your twitter password</Label>
@@ -112,7 +106,7 @@ const Transaction = () => {
          // className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
         >
-          Withdraw &rarr;
+          Transfer &rarr;
           <BottomGradient />
         </button>
  
@@ -170,4 +164,4 @@ const LabelInputContainer = ({
     </div>
   );
 };
-export default Transaction
+export default Transfer;

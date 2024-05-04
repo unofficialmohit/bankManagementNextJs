@@ -89,7 +89,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black "
+      className="text-black dark:text-neutral-200 hover:text-black "
     >
       {children}
     </Link>
@@ -101,6 +101,7 @@ export default function Navbar({ className}: { className?: string}) {
     const contractOwner=useSelector((state:any)=>state.owner);
     console.log(contractOwner);
     const[isAccountChanged,setIsAccountChanged]=useState(true);
+    const owner=useSelector((state:any)=>state.owner)
     const account=useSelector((state:any)=>state.account)
     const balance=useSelector((state:any)=>state.balance)
     const accountExist=useSelector((state:any)=>state.status)
@@ -160,28 +161,33 @@ setAccountStatus();
         <Menu setActive={setActive}>
        <HoveredLink href="/"><h1 style={{fontSize:"25px"}}>DECENTERALIZED BANK</h1></HoveredLink>
        <div className="flex space-x-2 justify-evenly w-96 items-center">
-            <div style={{color:"black"}}><HoveredLink href="/"  >Home</HoveredLink></div>
-            <MenuItem setActive={setActive} active={active} item="Transaction">
+            <div style={{color:"black"}}><HoveredLink href="/"  >{ (account!==0x000000000000000000000000000000000000 && accountExist )?'Home':((account!==0x000000000000000000000000000000000000 && !accountExist) ?'Please create an account to use the bank':'Please Connect your wallet to use bank')}</HoveredLink></div>
+            {account!==0x000000000000000000000000000000000000 && accountExist && <MenuItem setActive={setActive} active={active} item="Transaction">
                 {/* <div className="flex flex-col space-y-4 text-sm"> */}
-                <div className="  text-sm grid grid-cols-2 gap-5 p-1">
+                <div className="  text-sm grid grid-cols-3 gap-5 p-1">
     
-                  <HoveredLink href="/deposit">Deposit</HoveredLink>
+                  <HoveredLink  href="/deposit">Deposit</HoveredLink>
                   <HoveredLink href="/withdraw">Withdraw</HoveredLink>
+                  <HoveredLink href="/transfer">Transfer</HoveredLink>
                 
                 </div>
-              </MenuItem>
-              <MenuItem setActive={setActive} active={active} item="Loan">
+              </MenuItem>}
+             { account!==0x000000000000000000000000000000000000 && accountExist && <MenuItem setActive={setActive} active={active} item="Loan">
                 <div className="  text-sm grid grid-cols-2 gap-5 p-1">
                 <HoveredLink href="/getloan">Get loan</HoveredLink>
                   <HoveredLink href="/payloan">Pay loan</HoveredLink>
                 </div>
-              </MenuItem>
-              <MenuItem setActive={setActive} active={active} item="Manage loan fund">
+              </MenuItem>}
+             
+             
+             { account && owner?.toUpperCase()==account?.toUpperCase() ?<MenuItem setActive={setActive} active={active} item="Manage loan fund">
                 <div className="  text-sm grid grid-cols-2 gap-5 p-1">
                 <HoveredLink href="/depositloanfund">Deposit loan fund</HoveredLink>
                   <HoveredLink href="/withdrawloanfund">Withdraw loan fund</HoveredLink>
                 </div>
-              </MenuItem>
+              </MenuItem>:null}
+
+
        </div>
           <div className="flex items-center m-0 p-0">
          
@@ -201,7 +207,7 @@ setAccountStatus();
         </button>
         { 
         <div className="ml-9 text-xs">
-          {account && ((accountExist)?(balance=='-987654321'?"0":balance)+" ETH":
+          {account ? ((accountExist)?(balance=='-987654321'?"0":balance)+" ETH":
       <div style={{display:"flex",alignItems:"center"}}>
           <button className="shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] hover:bg-[rgba(0,118,255,0.9)] px-2 py-2 bg-[#0070f3] rounded-md text-white font-light transition duration-200 ease-linear"
           onClick={()=>{
@@ -210,7 +216,7 @@ setAccountStatus();
           >
           Create account</button>
       </div>
-        )}
+        ):null}
         </div>
         }
        
