@@ -66,10 +66,11 @@ const Transaction = () => {
 
   },[]);
   return (
-    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
+    <div className='w-screen h-screen'>
     <Vortex backgroundColor="black"
 	className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
   >
+    <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
     <div className="mt-36 max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
         DECENTERLIZED BANK
@@ -142,6 +143,7 @@ const Transaction = () => {
          
         </div>
       </form>
+    </div>
     </div>
     </Vortex>
 	</div>
