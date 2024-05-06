@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 const Loan =() => {
   const account=useSelector((state:any)=>state.account);
   const dispatch=useDispatch();
-
+  const [userDetails,setUserDetails]=useState<any>([]);
   const[loanType,setLoanType]=useState("");
   const payLoan=async (e:any)=>{
     e.preventDefault();
@@ -78,10 +78,20 @@ const Loan =() => {
       
     }
     dispatch(updateBalance(await getBalance(account)));
+    getDetails();
   }
+
+  async function getDetails(){
+    const result = await contract.methods
+    .displayUserDetails()
+    .call({ from: account });
+    setUserDetails(result);
+  }
+
   const navigate=useRouter();
   const userStatus=useSelector((state:any)=>state.status);
   useEffect(()=>{
+   
 	if(!userStatus)
 		{
 			alert("Please Connect your wallet");
@@ -89,6 +99,15 @@ const Loan =() => {
 		}
 
   },[]);
+  useEffect(()=>{
+   
+    if(account)
+    {
+   getDetails();
+      }
+  },[account])
+  console.log("asdasdasd",userDetails);
+
   return(
 
     <div className=" mt-18 w-[calc(100%-4rem)] mx-auto rounded-md  h-[40rem] overflow-hidden">
@@ -157,7 +176,48 @@ const Loan =() => {
         </SelectContent>
       </Select>
         </LabelInputContainer>
-    
+          {loanType=="car" &&  (userDetails?.CarLoan==0?<div>YOU DONT HAVE PENDING CAR LOAN</div>:
+          <div>
+          <div>
+          {"Loan Amount : "+userDetails?.CarLoan}
+          </div>
+          <div>
+          {"Emi Cost : "+userDetails?.CarEmiCost}
+          </div>
+          <div>
+          {"Emi Left : "+userDetails?.CarEmiLeft}
+          </div>
+          </div>)
+          }
+
+{loanType=="home" && (userDetails?.HomeLoan==0?<div>YOU DONT HAVE PENDING HOME LOAN</div>:
+          <div>
+          <div>
+          {"Loan Amount : "+userDetails?.HomeLoan}
+          </div>
+          <div>
+          {"Emi Cost : "+userDetails?.HomeEmiCost}
+          </div>
+          <div>
+          {"Emi Left : "+userDetails?.HomeEmiLeft}
+          </div>
+          </div>
+          )}
+
+{loanType=="education" && (userDetails?.EducationLoan==0?<div>YOU DONT HAVE PENDING EDUCATION LOAN</div>:
+          <div>
+          <div>
+          {"Loan Amount : "+userDetails?.EducationLoan}
+          </div>
+          <div>
+          {"Emi Cost : "+userDetails?.EducationEmiCost}
+          </div>
+          <div>
+          {"Emi Left : "+userDetails?.EducationEmiLeft}
+          </div>
+          </div>
+          )}
+
            <button
              className="mt-16 bg-gradient-to-br relative group/btn from-cyan-600 dark:from-cyan-600 dark:to-cyan-600 to-neutral-600 block dark:bg-cyan-600 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
              type="submit"
