@@ -5,6 +5,7 @@ import { updateBalance } from '@/slice/accountSlice';
 import { cn } from '@/utils/cn';
 import { contract, webjs } from '@/utils/connectToContract';
 import { getBalance } from '@/utils/getBalance';
+import { showError, showToast } from '@/utils/toast';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
@@ -19,6 +20,17 @@ const [withdrawFundAmount,setWithdrawFundAmount]=useState("");
 const dispatch=useDispatch();
   const handleSubmit=async (e:any)=>{
     e.preventDefault();
+
+    if(withdrawFundAmount=="")
+      {
+      showError("Enter withdraw Amount");
+      return;
+      }
+      if(isNaN(parseInt(withdrawFundAmount)))
+      {
+      showError("Please enter a number");
+      return;
+      }
     let flag=1;
 	await contract.methods.withdrawLoanFund(parseInt(withdrawFundAmount)).estimateGas({from:account})
 	.then(async (result:any)=>{
@@ -30,12 +42,20 @@ const dispatch=useDispatch();
 	})
 	.catch((error:any)=>{
 		flag=0;
-		window.alert("YOU CANT PERFORM THIS TRANSACTION");
+		showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
 	})
 	if(flag==1)
-	await contract.methods
+{	try{await contract.methods
     .withdrawLoanFund(parseInt(withdrawFundAmount))
     .send({ from: account });
+    showToast("Loan fund withdrawed Successfully");}
+    catch(error)
+    {
+      console.log(error);
+    }
+  }
   dispatch(updateBalance(await getBalance(account)));
   displayLoan();
   setWithdrawFundAmount("");

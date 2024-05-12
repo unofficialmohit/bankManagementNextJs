@@ -5,6 +5,7 @@ import { updateBalance } from '@/slice/accountSlice';
 import { cn } from '@/utils/cn';
 import { contract, webjs } from '@/utils/connectToContract';
 import { getBalance } from '@/utils/getBalance';
+import { showError, showToast } from '@/utils/toast';
 import { Label } from '@radix-ui/react-label';
 import { IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
@@ -21,6 +22,17 @@ const AddFund = () => {
   
 const handleSubmit=async (e:any)=>{
     e.preventDefault();
+
+    if(loanAmount=="")
+      {
+      showError("Enter loan Amount");
+      return;
+      }
+      if(isNaN(parseInt(loanAmount)))
+      {
+      showError("Please enter a number");
+      return;
+      }
     let flag=1;
 	await contract.methods.addLoanFund().estimateGas({from:account , value: parseInt(loanAmount)})
 	.then(async (result:any)=>{
@@ -33,16 +45,23 @@ const handleSubmit=async (e:any)=>{
 	})
 	.catch((error:any)=>{
 		flag=0;
-		window.alert("TRANSACTION NOT COMPLETED. "+error);
+    showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
+		// window.alert("TRANSACTION NOT COMPLETED. "+error);
 		console.log(error);
 	})
 	if(flag==1)
-	await contract.methods
+	{
+  try{  await contract.methods
     .addLoanFund()
     .send({ from: account, value: parseInt(loanAmount) })
-    .catch((error:any) => {
-      window.alert("ERROR" + error);
-    });
+    showToast("Loan fund deposited successfuly");}
+    catch(error)
+    {
+      console.log(error);
+    }
+  
+  }
   dispatch(updateBalance(await getBalance(account)));
   displayLoan();
 

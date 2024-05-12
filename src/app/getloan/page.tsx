@@ -20,6 +20,7 @@ import { contract, webjs } from '@/utils/connectToContract';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
+import { showError, showToast } from '@/utils/toast';
 const Loan = () => {
   const[loanAmount,setLoanAmount]=useState("");
   const[loanType,setLoanType]=useState("");
@@ -28,6 +29,33 @@ const Loan = () => {
   const account=useSelector((state:any)=>state.account);
   const handleSubmit=async (e:any)=>{
     e.preventDefault();
+    if(loanAmount=="")
+      {
+      showError("Enter loan Amount");
+      return;
+      }
+      if(isNaN(parseInt(loanAmount)))
+      {
+      showError("Please enter a number in loan amount");
+      return;
+      }
+      if(loanType=="")
+        {
+          showError("Please select loan type")
+          return;
+        }
+        if(loanPeriod=="")
+          {
+          showError("Enter loan period");
+          return;
+          }
+          if(isNaN(parseInt(loanPeriod)))
+          {
+          showError("Please enter a number in loan period");
+          return;
+          }
+
+
       if (loanType == "car") {
       let flag=1;
       await contract.methods.getCarLoan(parseInt(loanAmount), parseInt(loanPeriod)).estimateGas({from:account})
@@ -41,15 +69,23 @@ const Loan = () => {
       .catch((error:any)=>{
         flag=0;
         
-        
-        alert("YOU CANT PERFORM THIS TRANSACTION");
-        console.log(error);
+        showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
+        // showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
+        console.log(error.innerError.data.data.reason);
         return;
       })
       if(flag==1)
-        await contract.methods
+      { try{ await contract.methods
           .getCarLoan(parseInt(loanAmount), parseInt(loanPeriod))
           .send({ from: account });
+          showToast("Car loan successfully deposited to your account");}
+          catch(error)
+          {
+            console.log(error);
+          }
+        }
       } else if (loanType == "home") {
       let flag=1;
       await contract.methods.getHomeLoan(parseInt(loanAmount), parseInt(loanPeriod)).estimateGas({from:account})
@@ -62,14 +98,24 @@ const Loan = () => {
       })
       .catch((error:any)=>{
         flag=0;
-       alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
+
+      //  showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
         console.log(error)
         return;
       })
       if(flag==1)
-        await contract.methods
+      {  try{await contract.methods
           .getHomeLoan(parseInt(loanAmount), parseInt(loanPeriod))
           .send({ from: account });
+          showToast("Home loan successfully deposited to your account");}
+          catch(error)
+          {
+            console.log(error);
+          }
+        }
       } else {
       let flag=1;
       await contract.methods.getEducationLoan(parseInt(loanAmount), parseInt(loanPeriod)).estimateGas({from:account})
@@ -82,17 +128,29 @@ const Loan = () => {
       })
       .catch((error:any)=>{
         flag=0;
-       alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
+
+      //  showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
         console.log(error);
         return;
       })
       if(flag==1)
-        await contract.methods
+      {  
+       try{ await contract.methods
           .getEducationLoan(
             parseInt(loanAmount),
             parseInt(loanPeriod)
           )
           .send({ from: account });
+          showToast("Education loan successfully deposited to your account");}
+          catch(error)
+          {
+            console.log(error);
+          }
+
+        }
       }
       dispatch(updateBalance(await getBalance(account)));
     

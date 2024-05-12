@@ -14,6 +14,7 @@ import { contract, webjs } from '@/utils/connectToContract';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
+import { showError, showToast } from '@/utils/toast';
  
 const Transaction = () => {
   const dispatch=useDispatch();
@@ -30,10 +31,20 @@ const Transaction = () => {
       })
       .catch((error:any)=>{
         flag=0;
-        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1){
-      await contract.methods.withdraw(parseInt(withdrawAmount)).send({ from: account });
+      {
+     try{   await contract.methods.withdraw(parseInt(withdrawAmount)).send({ from: account });
+      showToast("ETH withdrawed Successfully");}
+      catch(error)
+      {
+        console.log(error);
+      }
+    
+    }
       dispatch(updateBalance(await getBalance(account)));
       setWithdrawAmount("");
     }

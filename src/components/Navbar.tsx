@@ -9,6 +9,7 @@ import getAccount from "@/utils/getAccount";
 import { updateAccountAddress, updateBalance, updateContractOwner, updateStatus } from "@/slice/accountSlice";
 import { getBalance } from "@/utils/getBalance";
 import { getStatus } from "@/utils/getStatus";
+import { showError, showToast } from "@/utils/toast";
 
 const transition = {
   type: "spring",
@@ -118,7 +119,9 @@ export default function Navbar({ className}: { className?: string}) {
 	})
 	.catch((error:any)=>{
 		flag=0;
-		window.alert("YOU CANT PERFORM THIS TRANSACTION");
+		showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
 	})
 	
 }
@@ -127,8 +130,17 @@ catch(error)
   console.log(error);
 }
 if(flag==1)
-  await contract.methods.createAccount().send({ from: account });
+  {
+    try{await contract.methods.createAccount().send({ from: account });
+showToast("Account created Successfully");}
+catch(error)
+{
+  console.log(error);
+}
+}
   dispatch(updateStatus(true));
+  // dispatch(updateBalance(await getBalance(account)))
+  //test this above line
 }
 
 React.useEffect(()=>{

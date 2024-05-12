@@ -13,6 +13,8 @@ import {store} from '../store/store'
 import { updateAccountAddress,updateBalance, updateStatus } from "@/slice/accountSlice.ts";
 import { getBalance } from "@/utils/getBalance";
 import { getStatus } from "@/utils/getStatus";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 declare global {
   interface Window{
@@ -109,6 +111,19 @@ children: React.ReactNode;
   
        <div className={inter.className}>
             <Component/>
+            <ToastContainer
+            position="top-center"
+            autoClose={4000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+
             {children}  
        </div>
       

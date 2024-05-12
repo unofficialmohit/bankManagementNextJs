@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
+import { showError, showToast } from '@/utils/toast';
 const Transaction = () => {
 	const dispatch=useDispatch();
 	const navigate=useRouter();
@@ -28,10 +29,17 @@ const Transaction = () => {
 		})
 		.catch((error:any)=>{
 			flag=0;
-			window.alert("YOU CANT PERFORM THIS TRANSACTION");
+			showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
 		})
 		if(flag==1){
-		await contract.methods.deposit().send({ from: account, value: parseInt(depositAmount) });
+		try{await contract.methods.deposit().send({ from: account, value: parseInt(depositAmount) });
+		showToast("ETH deposited successfuly");}
+		catch(error)
+		{
+			console.log(error)
+		}
 		dispatch(updateBalance(await getBalance(account)));
 		setDepositAmount("");
 	}
@@ -41,12 +49,12 @@ const Transaction = () => {
     e.preventDefault();
 	if(depositAmount=="")
 	{
-	alert("Enter deposit Amount");
+	showError("Enter deposit Amount");
 	return;
 	}
 	if(isNaN(parseInt(depositAmount)))
 	{
-	alert("Please enter a number");
+	showError("Please enter a number");
 	return;
 	}
 	depositETH();

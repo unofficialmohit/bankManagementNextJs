@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
+import { showError, showToast } from '@/utils/toast';
 
 const Loan =() => {
   const account=useSelector((state:any)=>state.account);
@@ -20,6 +21,13 @@ const Loan =() => {
   const[loanType,setLoanType]=useState("");
   const payLoan=async (e:any)=>{
     e.preventDefault();
+
+    if(loanType=="")
+      {
+        showError("Please select a loan type");
+        return ;
+      }
+
     if (loanType == "car") {
       let flag=1;
       await contract.methods.payCarEmi().estimateGas({from:account})
@@ -32,10 +40,18 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)
-        await contract.methods.payCarEmi().send({ from: account });
+   try{     await contract.methods.payCarEmi().send({ from: account });
+      showToast("Car EMI paid successfuly");}
+      catch(error)
+      {
+        console.log(error);
+      }
       } 
       
       
@@ -51,11 +67,19 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)
-        await contract.methods.payHomeEmi().send({ from: account });
-      } 
+    try{    await contract.methods.payHomeEmi().send({ from: account });
+      showToast("Home EMI paid successfuly");}
+    catch(error)
+    {
+      console.log(error);
+    }  
+    } 
       
       
       else {
@@ -70,10 +94,18 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        window.alert("YOU CANT PERFORM THIS TRANSACTION");
+        showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)
-        await contract.methods.payEducationEmi().send({ from: account });
+      try{  await contract.methods.payEducationEmi().send({ from: account });
+      showToast("Education EMI paid successfuly");}
+      catch(error)
+      {
+        console.log(error);
+      }
   
       
     }

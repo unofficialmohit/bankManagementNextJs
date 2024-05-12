@@ -14,15 +14,16 @@ import { contract, webjs } from '@/utils/connectToContract';
 import { updateBalance } from '@/slice/accountSlice';
 import { getBalance } from '@/utils/getBalance';
 import { useRouter } from 'next/navigation';
+import { showError, showToast } from '@/utils/toast';
  
 const Transfer:any = () => {
   const dispatch=useDispatch();
-  const[tranferAmount,setTransferAmount]=useState("");
+  const[transferAmount,setTransferAmount]=useState("");
   const[recieverAddress,setRecieverAddress]=useState("");
   const account=useSelector((state:any)=>state.account);
  const transfeETH=async()=>{
     let flag=1;
-	await contract.methods.transferMoney(parseInt(tranferAmount), recieverAddress).estimateGas({from:account})
+	await contract.methods.transferMoney(parseInt(transferAmount), recieverAddress).estimateGas({from:account})
 	.then(async (result:any)=>{
 		const gasPrice = await webjs.eth.getGasPrice();
 		console.log(gasPrice+"  "+result);
@@ -32,16 +33,34 @@ const Transfer:any = () => {
 	})
 	.catch((error:any)=>{
 		flag=0;
-		window.alert("YOU CANT PERFORM THIS TRANSACTION");
+		showError(error?.innerError?.data?.data?.reason);
+        // window.showError(error?.innerError?.data?.data?.reason);
+        // window.alert(error?.innerError?.data?.data?.reason);
 	})
 	if(flag==1)
-	await contract.methods
-    .transferMoney(parseInt(tranferAmount), recieverAddress)
+	{try{await contract.methods
+    .transferMoney(parseInt(transferAmount), recieverAddress)
     .send({ from: account });
+    showToast("ETH transfered successfully");}
+    catch(error)
+    {
+      console.log(error);
+    }
+  }
     dispatch(updateBalance(await getBalance(account)));
  }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(transferAmount=="")
+      {
+      showError("Enter transfer Amount");
+      return;
+      }
+      if(isNaN(parseInt(transferAmount)))
+      {
+      showError("Please enter a number");
+      return;
+      }
    transfeETH();
     console.log("Form submitted");
   };
@@ -86,7 +105,7 @@ const Transfer:any = () => {
         </LabelInputContainer> */}
         <LabelInputContainer className="mb-4">
           <Label htmlFor="withdraw">Transfer ETH</Label>
-          <Input id="withdraw" placeholder="Enter Amount" value={tranferAmount} onChange={(e)=>setTransferAmount(e.target.value)} type="text" />
+          <Input id="withdraw" placeholder="Enter Amount" value={transferAmount} onChange={(e)=>setTransferAmount(e.target.value)} type="text" />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="reciever">Reciever&apos;s Address</Label>
