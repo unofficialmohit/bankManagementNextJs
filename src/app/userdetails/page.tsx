@@ -146,6 +146,11 @@ if(!account)
     alert("Please Connect your wallet");
 	navigate.replace('/');
 }
+if(owner==account)
+  {
+    alert("Owner dont need to add details")
+    navigate.replace('/');
+  }
 if(account && userStatus)
 getData(`https://bankmanagement-five.vercel.app/getUserByAddress/${account}`);
   },[account,userStatus]);
