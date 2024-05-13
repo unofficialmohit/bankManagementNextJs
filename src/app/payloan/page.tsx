@@ -40,7 +40,8 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.data?.message);
+        showError(error?.data?.message.slice("execution reverted: ".length));
+
         // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
         // window.showError(error?.innerError?.data?.data?.reason);
@@ -68,7 +69,7 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.data?.message);
+        showError(error?.data?.message.slice("execution reverted: ".length));
 
         // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
@@ -97,7 +98,8 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.data?.message);
+        showError(error?.data?.message.slice("execution reverted: ".length));
+
 
         // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
