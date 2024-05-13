@@ -10,6 +10,7 @@ import { updateAccountAddress, updateBalance, updateContractOwner, updateStatus 
 import { getBalance } from "@/utils/getBalance";
 import { getStatus } from "@/utils/getStatus";
 import { showError, showToast } from "@/utils/toast";
+import { useRouter } from "next/navigation";
 
 const transition = {
   type: "spring",
@@ -99,6 +100,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
 export default function Navbar({ className}: { className?: string}) {
     const [active, setActive] = useState<string | null>(null);
     const dispatch=useDispatch();
+    const navigate=useRouter();
     const contractOwner=useSelector((state:any)=>state.owner);
     console.log(contractOwner);
     const[isAccountChanged,setIsAccountChanged]=useState(true);
@@ -219,11 +221,14 @@ setAccountStatus();
         </button>
         { 
         <div className="ml-9 text-xs">
-          {account ? ((accountExist)?(balance=='-987654321'?"0":balance)+" ETH":
+          {account ? ((accountExist)?<div style={{display:"flex",flexWrap:"wrap",alignItems:"center"}}><img onClick={()=>{
+          navigate.replace('/userdetails');
+          }} style={{marginInline:"3px",cursor:"pointer"}} width="40px" src="/user.svg"/><div>{(balance=='-987654321'?"0":balance)+" ETH"}</div></div>:
       <div style={{display:"flex",alignItems:"center"}}>
           <button className="shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] hover:bg-[rgba(0,118,255,0.9)] px-2 py-2 bg-[#0070f3] rounded-md text-white font-light transition duration-200 ease-linear"
           onClick={()=>{
-            createAccount();
+            navigate.replace('/userdetails');
+            // createAccount();
           }}  
           >
           Create account</button>
