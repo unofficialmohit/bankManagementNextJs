@@ -61,7 +61,7 @@ const UserDetails = () => {
     {
       try{
         contract.methods.createAccount().send({ from: account }).then(()=>{
-            postData('http://localhost:4000/addNewUser',{...formData,accountAddress:account}).then(()=>{
+            postData('https://bankmanagement-five.vercel.app/addNewUser',{...formData,accountAddress:account}).then(()=>{
                 showToast("Account created Successfully");
             })
         }
@@ -147,7 +147,7 @@ if(!account)
 	navigate.replace('/');
 }
 if(account && userStatus)
-getData(`http://localhost:4000/getUserByAddress/${account}`);
+getData(`https://bankmanagement-five.vercel.app/getUserByAddress/${account}`);
   },[account,userStatus]);
     const handleSubmit = async(e:any) => {
         e.preventDefault();
@@ -162,7 +162,7 @@ getData(`http://localhost:4000/getUserByAddress/${account}`);
         }
         if(userStatus)
         {
-            await putData(`http://localhost:4000/updateUser/${account}`,{...formData,accountAddress:account}); 
+            await putData(`https://bankmanagement-five.vercel.app/updateUser/${account}`,{...formData,accountAddress:account}); 
             return;
         }
         console.log('Form data submitted:', formData);
