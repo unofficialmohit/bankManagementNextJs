@@ -42,9 +42,9 @@ const Loan =() => {
         flag=0;
         showError(error?.data?.message.slice("execution reverted: ".length));
 
-        // showError(error?.innerError?.data?.data?.reason);
-        // showError(error?.innerError?.data?.data?.reason);
-        // window.showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // window.showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)
@@ -71,9 +71,9 @@ const Loan =() => {
         flag=0;
         showError(error?.data?.message.slice("execution reverted: ".length));
 
-        // showError(error?.innerError?.data?.data?.reason);
-        // showError(error?.innerError?.data?.data?.reason);
-        // window.showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // window.showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)
@@ -101,9 +101,9 @@ const Loan =() => {
         showError(error?.data?.message.slice("execution reverted: ".length));
 
 
-        // showError(error?.innerError?.data?.data?.reason);
-        // showError(error?.innerError?.data?.data?.reason);
-        // window.showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // showError(error?.data?.message.slice("execution reverted: ".length));
+        // window.showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
       })
       if(flag==1)

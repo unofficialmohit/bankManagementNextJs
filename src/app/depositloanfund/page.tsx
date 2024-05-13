@@ -45,7 +45,7 @@ const handleSubmit=async (e:any)=>{
 	})
 	.catch((error:any)=>{
 		flag=0;
-    showError(error?.innerError?.data?.data?.reason);
+    showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
 		// window.alert("TRANSACTION NOT COMPLETED. "+error);
 		console.log(error);

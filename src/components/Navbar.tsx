@@ -121,8 +121,8 @@ export default function Navbar({ className}: { className?: string}) {
 	})
 	.catch((error:any)=>{
 		flag=0;
-		showError(error?.innerError?.data?.data?.reason);
-        // window.showError(error?.innerError?.data?.data?.reason);
+		showError(error?.data?.message.slice("execution reverted: ".length));
+        // window.showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
 	})
 	

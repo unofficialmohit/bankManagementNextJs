@@ -69,9 +69,9 @@ const Loan = () => {
       .catch((error:any)=>{
         flag=0;
         
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
-        // showError(error?.innerError?.data?.data?.reason);
+        // showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
         console.log(error.innerError.data.data.reason);
         return;
@@ -98,10 +98,10 @@ const Loan = () => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
 
-      //  showError(error?.innerError?.data?.data?.reason);
+      //  showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
         console.log(error)
         return;
@@ -128,10 +128,10 @@ const Loan = () => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
 
-      //  showError(error?.innerError?.data?.data?.reason);
+      //  showError(error?.data?.message.slice("execution reverted: ".length));
         // window.alert(error?.innerError?.data?.data?.reason);
         console.log(error);
         return;
