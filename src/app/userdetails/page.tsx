@@ -160,9 +160,7 @@ getData(`https://bankmanagement-five.vercel.app/getUserByAddress/${account}`);
         if(!account) return;
         // if(!userStatus)
         if(!userStatus)
-        {   
-           
-            createAccount();
+        {   createAccount();
             return;
         }
         if(userStatus)

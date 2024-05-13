@@ -40,7 +40,8 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message);
+        // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
         // window.showError(error?.innerError?.data?.data?.reason);
         // window.alert(error?.innerError?.data?.data?.reason);
@@ -67,7 +68,9 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message);
+
+        // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
         // window.showError(error?.innerError?.data?.data?.reason);
         // window.alert(error?.innerError?.data?.data?.reason);
@@ -94,7 +97,9 @@ const Loan =() => {
       })
       .catch((error:any)=>{
         flag=0;
-        showError(error?.innerError?.data?.data?.reason);
+        showError(error?.data?.message);
+
+        // showError(error?.innerError?.data?.data?.reason);
         // showError(error?.innerError?.data?.data?.reason);
         // window.showError(error?.innerError?.data?.data?.reason);
         // window.alert(error?.innerError?.data?.data?.reason);

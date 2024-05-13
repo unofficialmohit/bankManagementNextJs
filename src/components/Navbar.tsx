@@ -221,9 +221,9 @@ setAccountStatus();
         </button>
         { 
         <div className="ml-9 text-xs">
-          {account ? ((accountExist)?<div style={{display:"flex",flexWrap:"wrap",alignItems:"center"}}><img onClick={()=>{
+          {account ? ((accountExist)?<div style={{display:"flex",flexWrap:"wrap",alignItems:"center"}}>({owner!==account &&<img onClick={()=>{
           navigate.replace('/userdetails');
-          }} style={{marginInline:"3px",cursor:"pointer"}} width="40px" src="/user.svg"/><div>{(balance=='-987654321'?"0":balance)+" ETH"}</div></div>:
+          }} style={{marginInline:"3px",cursor:"pointer"}} width="40px" src="/user.svg"/>})<div>{(balance=='-987654321'?"0":balance)+" ETH"}</div></div>:
       <div style={{display:"flex",alignItems:"center"}}>
           <button className="shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] hover:bg-[rgba(0,118,255,0.9)] px-2 py-2 bg-[#0070f3] rounded-md text-white font-light transition duration-200 ease-linear"
           onClick={()=>{
