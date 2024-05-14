@@ -221,7 +221,7 @@ setAccountStatus();
         </button>
         { 
         <div className="ml-9 text-xs">
-          {account ? ((accountExist)?<div style={{display:"flex",flexWrap:"wrap",alignItems:"center"}}>{owner.toUpperCase()!==account.toUpperCase() && <img onClick={()=>{
+          {account ? ((accountExist)?<div style={{display:"flex",flexWrap:"wrap",alignItems:"center"}}>{owner?.toUpperCase()!==account?.toUpperCase() && <img onClick={()=>{
           navigate.replace('/userdetails');
           }} style={{marginInline:"3px",cursor:"pointer"}} width="40px" src="/user.svg"/>}<div>{(balance=='-987654321'?"0":balance)+" ETH"}</div></div>:
       <div style={{display:"flex",alignItems:"center"}}>
