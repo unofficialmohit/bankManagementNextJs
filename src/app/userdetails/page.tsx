@@ -147,7 +147,7 @@ if(!account)
     alert("Please Connect your wallet");
 	navigate.replace('/');
 }
-if(owner.toUpperCase()==account.toUpperCase())
+if(owner?.toUpperCase()==account?.toUpperCase())
   {
     alert("Owner dont need to add details")
     navigate.replace('/');
